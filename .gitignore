@@ -8,3 +8,6 @@ build/
 venv/
 
 runtime/
+
+# 导出预览位图（体积大且可由 SVG 重新生成，源码库只留矢量源）
+output/*.png
