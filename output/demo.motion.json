@@ -1,0 +1,2290 @@
+{
+  "animation_contract": {
+    "connectors_visible_at_opening": false,
+    "draw_easing": "linear",
+    "draw_schedule": [
+      {
+        "frames": [
+          1,
+          6
+        ],
+        "order": 0,
+        "role": "connect",
+        "stage": 1
+      },
+      {
+        "frames": [
+          5,
+          12
+        ],
+        "order": 0,
+        "role": "prepare",
+        "stage": 2
+      },
+      {
+        "frames": [
+          10,
+          17
+        ],
+        "order": 0,
+        "role": "invoke",
+        "stage": 3
+      },
+      {
+        "frames": [
+          15,
+          22
+        ],
+        "order": 0,
+        "role": "tool-call",
+        "stage": 4
+      },
+      {
+        "frames": [
+          18,
+          27
+        ],
+        "order": 1,
+        "role": "token-stream",
+        "stage": 4
+      },
+      {
+        "frames": [
+          25,
+          32
+        ],
+        "order": 0,
+        "role": "govern",
+        "stage": 5
+      },
+      {
+        "frames": [
+          25,
+          32
+        ],
+        "order": 1,
+        "role": "measure",
+        "stage": 5
+      },
+      {
+        "frames": [
+          31,
+          36
+        ],
+        "order": 0,
+        "role": "promote",
+        "stage": 6
+      }
+    ],
+    "empty_opening_frame": 0,
+    "forbidden": [
+      "source-node-motion",
+      "source-text-motion",
+      "source-geometry-mutation",
+      "source-marker-mutation",
+      "camera-motion",
+      "animated-background"
+    ],
+    "maximum_concurrent_draws": 3,
+    "nodes_visible_every_frame": true,
+    "persistent_data_flow": {
+      "body": {
+        "appended_below_labels_and_nodes": true,
+        "color": "inherit-source-stroke",
+        "dash_pattern": [
+          10,
+          33
+        ],
+        "filter_free": true,
+        "linecap": "round",
+        "linejoin": "round",
+        "marker_free": true,
+        "maximum_live_width": 2.5,
+        "opacity": 0.86,
+        "primitive": "api-token-rail",
+        "resolved_widths_in_schedule_order": [
+          2.0,
+          2.0,
+          2.0,
+          2.0,
+          2.0,
+          2.0,
+          2.0,
+          2.0
+        ],
+        "stroke_width": "min(maximum_live_width, source_stroke)"
+      },
+      "dash_offset_per_rendered_frame": -6,
+      "dash_period": 43,
+      "direction": "source-to-target",
+      "direction_sentinels": [
+        {
+          "directions": [
+            "right"
+          ],
+          "key": "connect/0"
+        },
+        {
+          "directions": [
+            "down",
+            "left",
+            "down"
+          ],
+          "key": "prepare/0"
+        },
+        {
+          "directions": [
+            "right"
+          ],
+          "key": "tool-call/0"
+        },
+        {
+          "directions": [
+            "down",
+            "left",
+            "down"
+          ],
+          "key": "token-stream/1"
+        },
+        {
+          "directions": [
+            "down"
+          ],
+          "key": "govern/0"
+        },
+        {
+          "directions": [
+            "right"
+          ],
+          "key": "promote/0"
+        }
+      ],
+      "expected_initial_phases": [
+        7,
+        14,
+        21,
+        28,
+        31,
+        35,
+        38,
+        42
+      ],
+      "fade_in_factors": [
+        0.3,
+        0.65,
+        1.0
+      ],
+      "fade_in_frames": [
+        36,
+        38
+      ],
+      "full_opacity_frames": [
+        38,
+        109
+      ],
+      "minimum_review_scale": "50%",
+      "period_step_coprime": true,
+      "phase_policy": "(motionStage * 7 + motionOrder * 3) mod 43",
+      "primitive": "api-token-rail",
+      "rendered_frames": [
+        36,
+        114
+      ],
+      "reset_behavior": "live rails, signatures, and scene auxiliaries keep advancing while the shared reset opacity fades to 0.03",
+      "reset_opacity_samples": [
+        1.0,
+        0.7575,
+        0.515,
+        0.2725,
+        0.03
+      ],
+      "reset_range": [
+        110,
+        114
+      ],
+      "route_keys": [
+        {
+          "order": 0,
+          "role": "connect"
+        },
+        {
+          "order": 0,
+          "role": "prepare"
+        },
+        {
+          "order": 0,
+          "role": "invoke"
+        },
+        {
+          "order": 0,
+          "role": "tool-call"
+        },
+        {
+          "order": 1,
+          "role": "token-stream"
+        },
+        {
+          "order": 0,
+          "role": "govern"
+        },
+        {
+          "order": 1,
+          "role": "measure"
+        },
+        {
+          "order": 0,
+          "role": "promote"
+        }
+      ],
+      "signature": {
+        "animated_attributes": [
+          "transform",
+          "opacity"
+        ],
+        "appended_below_labels_and_nodes": true,
+        "direction": "source-to-target",
+        "endpoint_clearance": 10,
+        "geometry": {
+          "cell_gap": 2,
+          "cell_height": 4,
+          "cell_opacities": [
+            1.0,
+            0.72,
+            0.44
+          ],
+          "cell_width": 4,
+          "group_height": 8,
+          "group_width": 18,
+          "shape": "three-cell-token-train",
+          "tangent_aware_rotation": true
+        },
+        "path_advance_per_rendered_frame": 6,
+        "primitive": "token-train",
+        "tangent_aware_rotation": true,
+        "wrap": "target-clearance-to-source-clearance"
+      },
+      "signature_advance_per_rendered_frame": 6,
+      "signature_count": 8,
+      "signature_primitive": "token-train",
+      "stream_count": 8,
+      "travel_easing": "linear",
+      "travel_pixels_per_frame_at_100_percent": 6,
+      "travel_pixels_per_frame_at_50_percent": 3.0,
+      "travel_user_units_per_rendered_frame": 6
+    },
+    "primitive": "connector-draw-on-with-persistent-data-flow",
+    "reset_opacity_samples": [
+      1.0,
+      0.7575,
+      0.515,
+      0.2725,
+      0.03
+    ],
+    "reset_range": [
+      110,
+      114
+    ],
+    "route_label_opacity_states": 8,
+    "schedule_key": "(data-motion-role, data-motion-order)",
+    "settled_markers": "original marker appears only after route arrival",
+    "settled_topology_dynamic": true,
+    "source_edges_hidden_by_transient_css": true,
+    "text_geometry_motion": 0,
+    "topology_draw_on": true
+  },
+  "artifact": {
+    "bytes": 152695,
+    "encoder": "ffmpeg/gif-palette",
+    "format": "gif",
+    "mime_type": "image/gif",
+    "path": "d:\\4Project\\tech-graph\\output\\demo.gif",
+    "probe": {
+      "codec_name": "gif",
+      "container": {
+        "duration": "5.750000",
+        "format_name": "gif"
+      },
+      "duration": "5.750000",
+      "height": 700,
+      "nb_frames": "115",
+      "nb_read_frames": "115",
+      "pix_fmt": "bgra",
+      "r_frame_rate": "20/1",
+      "width": 960
+    },
+    "sha256": "f1937f1294b47569a4d44bc7ca5b5a8fb07ad45d1dd2dfc6d32193dccfba69ed",
+    "source_frame_count": 115
+  },
+  "dry_run": false,
+  "duration_seconds": 5.75,
+  "encoded_dimensions": {
+    "height": 700,
+    "width": 960
+  },
+  "fixture_sha256": "4d03096787cceb3e2be61567cf12996291dd46d2289bd5394cb30360b48a4473",
+  "fps": 20,
+  "frame_count": 115,
+  "frame_uniqueness_contract": {
+    "adjacent_duplicates_allowed": false,
+    "intentional_reset_boundary_opacity": 1.0,
+    "intentional_reset_boundary_repeat_frame": 110,
+    "long_timeline_repeat_scope": [
+      38,
+      109
+    ],
+    "minimum_unique_rasters_for_long_timeline": 75,
+    "opening_construction_and_reset_tail_globally_distinct": true,
+    "strict_all_unique_through_frame_count": 75
+  },
+  "height": 700,
+  "input_kind": "svg",
+  "loop": {
+    "adjacent_duplicate_count": 0,
+    "all_frames_unique": true,
+    "delta_quality": {
+      "adjacent_max": 0.0010955137254901961,
+      "adjacent_median": 8.740666666666668e-05,
+      "adjacent_min": 5.187921568627451e-06,
+      "adjacent_p95": 0.0003294874509803922,
+      "changed_area_method": "accumulated adjacent luma delta greater than 2 percent",
+      "changed_area_ratio": 0.013486588235294118,
+      "metric": "normalized-luma-mean-absolute-difference",
+      "seam": 0.00015298196078431374,
+      "seam_within_adjacent_p95": true
+    },
+    "embedded_loop_count": 0,
+    "encoded_frames": {
+      "adjacent_duplicate_count": 0,
+      "adjacent_duplicate_pairs": [],
+      "algorithm": "framemd5",
+      "all_frames_unique": true,
+      "first_frame_hash": "85e4ed491e937b5a3fc8129b379a7726",
+      "frame_count": 115,
+      "intentional_reset_boundary_opacity": 1.0,
+      "intentional_reset_boundary_repeat_count": 0,
+      "intentional_reset_boundary_repeat_evidence": [],
+      "intentional_reset_boundary_repeat_frame": 110,
+      "last_frame_hash": "bc41b8a20126101a6824115bf282d2e4",
+      "minimum_unique_frame_count": 75,
+      "opening_construction_and_reset_tail_globally_distinct": true,
+      "repeat_scope": [
+        38,
+        109
+      ],
+      "repeat_scope_policy": "non-adjacent-repeats-inside-full-opacity-plus-reset-start-boundary",
+      "repeated_frame_group_count": 0,
+      "repeated_frame_index_evidence": [],
+      "repeats_confined_to_full_opacity": true,
+      "repeats_confined_to_permitted_scope": true,
+      "unique_frame_count": 115
+    },
+    "first_frame_sha256": "9bf4a1c91926d79cd77494a6cacec2b50ba989e27e3fb920f5f68deb4385a6c8",
+    "intentional_reset_boundary_repeat_count": 0,
+    "intentional_reset_boundary_repeat_evidence": [],
+    "last_frame_sha256": "e7a93e61517f427b145b434ca93bc4bad8f3ef8c231c60e7299e5508856ccbf1",
+    "minimum_unique_frame_count": 75,
+    "opening_construction_and_reset_tail_globally_distinct": true,
+    "playback": "embedded-infinite",
+    "raw_frames": {
+      "adjacent_duplicate_count": 0,
+      "adjacent_duplicate_pairs": [],
+      "algorithm": "sha256",
+      "all_frames_unique": true,
+      "first_frame_hash": "9bf4a1c91926d79cd77494a6cacec2b50ba989e27e3fb920f5f68deb4385a6c8",
+      "frame_count": 115,
+      "intentional_reset_boundary_opacity": 1.0,
+      "intentional_reset_boundary_repeat_count": 0,
+      "intentional_reset_boundary_repeat_evidence": [],
+      "intentional_reset_boundary_repeat_frame": 110,
+      "last_frame_hash": "e7a93e61517f427b145b434ca93bc4bad8f3ef8c231c60e7299e5508856ccbf1",
+      "minimum_unique_frame_count": 75,
+      "opening_construction_and_reset_tail_globally_distinct": true,
+      "repeat_scope": [
+        38,
+        109
+      ],
+      "repeat_scope_policy": "non-adjacent-repeats-inside-full-opacity-plus-reset-start-boundary",
+      "repeated_frame_group_count": 0,
+      "repeated_frame_index_evidence": [],
+      "repeats_confined_to_full_opacity": true,
+      "repeats_confined_to_permitted_scope": true,
+      "unique_frame_count": 115
+    },
+    "repeat_scope": [
+      38,
+      109
+    ],
+    "repeat_scope_policy": "non-adjacent-repeats-inside-full-opacity-plus-reset-start-boundary",
+    "repeated_frame_index_evidence": [],
+    "repeats_confined_to_full_opacity": true,
+    "repeats_confined_to_permitted_scope": true,
+    "sampling": "uniform-frame-centers",
+    "unique_frame_count": 115
+  },
+  "loop_playback": "embedded-infinite",
+  "mime_type": "image/gif",
+  "motion_class": "semantic",
+  "motion_grammar": {
+    "curves": {
+      "draw": "linear",
+      "persistent-data-flow": "linear",
+      "reset": "linear"
+    },
+    "draw_on": {
+      "connectors_visible_at_opening": false,
+      "draw_easing": "linear",
+      "draw_schedule": [
+        {
+          "frames": [
+            1,
+            6
+          ],
+          "order": 0,
+          "role": "connect",
+          "stage": 1
+        },
+        {
+          "frames": [
+            5,
+            12
+          ],
+          "order": 0,
+          "role": "prepare",
+          "stage": 2
+        },
+        {
+          "frames": [
+            10,
+            17
+          ],
+          "order": 0,
+          "role": "invoke",
+          "stage": 3
+        },
+        {
+          "frames": [
+            15,
+            22
+          ],
+          "order": 0,
+          "role": "tool-call",
+          "stage": 4
+        },
+        {
+          "frames": [
+            18,
+            27
+          ],
+          "order": 1,
+          "role": "token-stream",
+          "stage": 4
+        },
+        {
+          "frames": [
+            25,
+            32
+          ],
+          "order": 0,
+          "role": "govern",
+          "stage": 5
+        },
+        {
+          "frames": [
+            25,
+            32
+          ],
+          "order": 1,
+          "role": "measure",
+          "stage": 5
+        },
+        {
+          "frames": [
+            31,
+            36
+          ],
+          "order": 0,
+          "role": "promote",
+          "stage": 6
+        }
+      ],
+      "empty_opening_frame": 0,
+      "forbidden": [
+        "source-node-motion",
+        "source-text-motion",
+        "source-geometry-mutation",
+        "source-marker-mutation",
+        "camera-motion",
+        "animated-background"
+      ],
+      "maximum_concurrent_draws": 3,
+      "nodes_visible_every_frame": true,
+      "persistent_data_flow": {
+        "body": {
+          "appended_below_labels_and_nodes": true,
+          "color": "inherit-source-stroke",
+          "dash_pattern": [
+            10,
+            33
+          ],
+          "filter_free": true,
+          "linecap": "round",
+          "linejoin": "round",
+          "marker_free": true,
+          "maximum_live_width": 2.5,
+          "opacity": 0.86,
+          "primitive": "api-token-rail",
+          "resolved_widths_in_schedule_order": [
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "stroke_width": "min(maximum_live_width, source_stroke)"
+        },
+        "dash_offset_per_rendered_frame": -6,
+        "dash_period": 43,
+        "direction": "source-to-target",
+        "direction_sentinels": [
+          {
+            "directions": [
+              "right"
+            ],
+            "key": "connect/0"
+          },
+          {
+            "directions": [
+              "down",
+              "left",
+              "down"
+            ],
+            "key": "prepare/0"
+          },
+          {
+            "directions": [
+              "right"
+            ],
+            "key": "tool-call/0"
+          },
+          {
+            "directions": [
+              "down",
+              "left",
+              "down"
+            ],
+            "key": "token-stream/1"
+          },
+          {
+            "directions": [
+              "down"
+            ],
+            "key": "govern/0"
+          },
+          {
+            "directions": [
+              "right"
+            ],
+            "key": "promote/0"
+          }
+        ],
+        "expected_initial_phases": [
+          7,
+          14,
+          21,
+          28,
+          31,
+          35,
+          38,
+          42
+        ],
+        "fade_in_factors": [
+          0.3,
+          0.65,
+          1.0
+        ],
+        "fade_in_frames": [
+          36,
+          38
+        ],
+        "full_opacity_frames": [
+          38,
+          109
+        ],
+        "minimum_review_scale": "50%",
+        "period_step_coprime": true,
+        "phase_policy": "(motionStage * 7 + motionOrder * 3) mod 43",
+        "primitive": "api-token-rail",
+        "rendered_frames": [
+          36,
+          114
+        ],
+        "reset_behavior": "live rails, signatures, and scene auxiliaries keep advancing while the shared reset opacity fades to 0.03",
+        "reset_opacity_samples": [
+          1.0,
+          0.7575,
+          0.515,
+          0.2725,
+          0.03
+        ],
+        "reset_range": [
+          110,
+          114
+        ],
+        "route_keys": [
+          {
+            "order": 0,
+            "role": "connect"
+          },
+          {
+            "order": 0,
+            "role": "prepare"
+          },
+          {
+            "order": 0,
+            "role": "invoke"
+          },
+          {
+            "order": 0,
+            "role": "tool-call"
+          },
+          {
+            "order": 1,
+            "role": "token-stream"
+          },
+          {
+            "order": 0,
+            "role": "govern"
+          },
+          {
+            "order": 1,
+            "role": "measure"
+          },
+          {
+            "order": 0,
+            "role": "promote"
+          }
+        ],
+        "signature": {
+          "animated_attributes": [
+            "transform",
+            "opacity"
+          ],
+          "appended_below_labels_and_nodes": true,
+          "direction": "source-to-target",
+          "endpoint_clearance": 10,
+          "geometry": {
+            "cell_gap": 2,
+            "cell_height": 4,
+            "cell_opacities": [
+              1.0,
+              0.72,
+              0.44
+            ],
+            "cell_width": 4,
+            "group_height": 8,
+            "group_width": 18,
+            "shape": "three-cell-token-train",
+            "tangent_aware_rotation": true
+          },
+          "path_advance_per_rendered_frame": 6,
+          "primitive": "token-train",
+          "tangent_aware_rotation": true,
+          "wrap": "target-clearance-to-source-clearance"
+        },
+        "signature_advance_per_rendered_frame": 6,
+        "signature_count": 8,
+        "signature_primitive": "token-train",
+        "stream_count": 8,
+        "travel_easing": "linear",
+        "travel_pixels_per_frame_at_100_percent": 6,
+        "travel_pixels_per_frame_at_50_percent": 3.0,
+        "travel_user_units_per_rendered_frame": 6
+      },
+      "primitive": "connector-draw-on-with-persistent-data-flow",
+      "reset_opacity_samples": [
+        1.0,
+        0.7575,
+        0.515,
+        0.2725,
+        0.03
+      ],
+      "reset_range": [
+        110,
+        114
+      ],
+      "route_label_opacity_states": 8,
+      "schedule_key": "(data-motion-role, data-motion-order)",
+      "settled_markers": "original marker appears only after route arrival",
+      "settled_topology_dynamic": true,
+      "source_edges_hidden_by_transient_css": true,
+      "text_geometry_motion": 0,
+      "topology_draw_on": true
+    },
+    "duration_seconds": 5.75,
+    "frame_duration_ms": 50.0,
+    "phases": {
+      "draw": {
+        "frames": [
+          1,
+          36
+        ],
+        "seconds": [
+          0.075,
+          1.825
+        ]
+      },
+      "empty": {
+        "frames": [
+          0,
+          0
+        ],
+        "seconds": [
+          0.025,
+          0.025
+        ]
+      },
+      "full_opacity": {
+        "frames": [
+          38,
+          109
+        ],
+        "seconds": [
+          1.925,
+          5.475
+        ]
+      },
+      "reset": {
+        "frames": [
+          110,
+          114
+        ],
+        "seconds": [
+          5.525,
+          5.725
+        ]
+      },
+      "stream": {
+        "frames": [
+          36,
+          114
+        ],
+        "seconds": [
+          1.825,
+          5.725
+        ]
+      }
+    },
+    "sample_index_expression": "time * fps - 0.5",
+    "sampling": "uniform-frame-centers",
+    "version": "3.4"
+  },
+  "motion_grammar_version": "3.4",
+  "motion_scene": "token-stream",
+  "ok": true,
+  "output": "d:\\4Project\\tech-graph\\output\\demo.gif",
+  "output_format": "gif",
+  "preset": "token-stream",
+  "rendered_pixels": 77280000,
+  "renderer": {
+    "chrome": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "duration_seconds": 5.75,
+    "effects": 24,
+    "engine": "chromium-svg-draw-on-persistent-data-flow",
+    "fps": 20,
+    "frame_count": 115,
+    "height": 700,
+    "input_kind": "svg",
+    "loop_frame_policy": "integer-frame-index-centers-with-steady-state-plus-reset-boundary-repeat-scope",
+    "module": "FIREWORKS_PUPPETEER_PATH",
+    "module_version": "25.3.0",
+    "ok": true,
+    "paint_barrier": "fonts-ready-plus-two-animation-frames-before-capture",
+    "preset": "token-stream",
+    "resolved_module": "C:\\Users\\Administrator\\.codebuddy\\skills\\fireworks-tech-graph\\node_modules\\puppeteer-core\\lib\\puppeteer\\puppeteer-core.js",
+    "sandbox": "enabled",
+    "scene_report": {
+      "animated_background_count": 0,
+      "auxiliary_primitives": [],
+      "camera_motion_count": 0,
+      "connectors_visible_at_opening": false,
+      "direction_sentinels": [
+        {
+          "actual": [
+            "right"
+          ],
+          "dash_offset_per_rendered_frame": -6,
+          "expected": [
+            "right"
+          ],
+          "order": 0,
+          "passed": true,
+          "role": "connect",
+          "schedule_key": "connect/0",
+          "signature_advance_per_rendered_frame": 6
+        },
+        {
+          "actual": [
+            "down",
+            "left",
+            "down"
+          ],
+          "dash_offset_per_rendered_frame": -6,
+          "expected": [
+            "down",
+            "left",
+            "down"
+          ],
+          "order": 0,
+          "passed": true,
+          "role": "prepare",
+          "schedule_key": "prepare/0",
+          "signature_advance_per_rendered_frame": 6
+        },
+        {
+          "actual": [
+            "right"
+          ],
+          "dash_offset_per_rendered_frame": -6,
+          "expected": [
+            "right"
+          ],
+          "order": 0,
+          "passed": true,
+          "role": "tool-call",
+          "schedule_key": "tool-call/0",
+          "signature_advance_per_rendered_frame": 6
+        },
+        {
+          "actual": [
+            "down",
+            "left",
+            "down"
+          ],
+          "dash_offset_per_rendered_frame": -6,
+          "expected": [
+            "down",
+            "left",
+            "down"
+          ],
+          "order": 1,
+          "passed": true,
+          "role": "token-stream",
+          "schedule_key": "token-stream/1",
+          "signature_advance_per_rendered_frame": 6
+        },
+        {
+          "actual": [
+            "down"
+          ],
+          "dash_offset_per_rendered_frame": -6,
+          "expected": [
+            "down"
+          ],
+          "order": 0,
+          "passed": true,
+          "role": "govern",
+          "schedule_key": "govern/0",
+          "signature_advance_per_rendered_frame": 6
+        },
+        {
+          "actual": [
+            "right"
+          ],
+          "dash_offset_per_rendered_frame": -6,
+          "expected": [
+            "right"
+          ],
+          "order": 0,
+          "passed": true,
+          "role": "promote",
+          "schedule_key": "promote/0",
+          "signature_advance_per_rendered_frame": 6
+        }
+      ],
+      "draw_clones": 8,
+      "draw_contract": {
+        "easing": "linear",
+        "marker_after_arrival": true,
+        "marker_during_draw": false,
+        "source_geometry": "exact immutable edge clone"
+      },
+      "draw_schedule": [
+        {
+          "easing": "linear",
+          "edge_id": "connect",
+          "marker_after_arrival": true,
+          "marker_during_draw": false,
+          "order": 0,
+          "rendered_frames": [
+            1,
+            6
+          ],
+          "role": "connect",
+          "schedule_key": "connect/0",
+          "stage": 1
+        },
+        {
+          "easing": "linear",
+          "edge_id": "prepare",
+          "marker_after_arrival": true,
+          "marker_during_draw": false,
+          "order": 0,
+          "rendered_frames": [
+            5,
+            12
+          ],
+          "role": "prepare",
+          "schedule_key": "prepare/0",
+          "stage": 2
+        },
+        {
+          "easing": "linear",
+          "edge_id": "invoke",
+          "marker_after_arrival": true,
+          "marker_during_draw": false,
+          "order": 0,
+          "rendered_frames": [
+            10,
+            17
+          ],
+          "role": "invoke",
+          "schedule_key": "invoke/0",
+          "stage": 3
+        },
+        {
+          "easing": "linear",
+          "edge_id": "tool-call",
+          "marker_after_arrival": true,
+          "marker_during_draw": false,
+          "order": 0,
+          "rendered_frames": [
+            15,
+            22
+          ],
+          "role": "tool-call",
+          "schedule_key": "tool-call/0",
+          "stage": 4
+        },
+        {
+          "easing": "linear",
+          "edge_id": "stream",
+          "marker_after_arrival": true,
+          "marker_during_draw": false,
+          "order": 1,
+          "rendered_frames": [
+            18,
+            27
+          ],
+          "role": "token-stream",
+          "schedule_key": "token-stream/1",
+          "stage": 4
+        },
+        {
+          "easing": "linear",
+          "edge_id": "govern",
+          "marker_after_arrival": true,
+          "marker_during_draw": false,
+          "order": 0,
+          "rendered_frames": [
+            25,
+            32
+          ],
+          "role": "govern",
+          "schedule_key": "govern/0",
+          "stage": 5
+        },
+        {
+          "easing": "linear",
+          "edge_id": "measure",
+          "marker_after_arrival": true,
+          "marker_during_draw": false,
+          "order": 1,
+          "rendered_frames": [
+            25,
+            32
+          ],
+          "role": "measure",
+          "schedule_key": "measure/1",
+          "stage": 5
+        },
+        {
+          "easing": "linear",
+          "edge_id": "promote",
+          "marker_after_arrival": true,
+          "marker_during_draw": false,
+          "order": 0,
+          "rendered_frames": [
+            31,
+            36
+          ],
+          "role": "promote",
+          "schedule_key": "promote/0",
+          "stage": 6
+        }
+      ],
+      "dynamic_not_thicker_than_source": true,
+      "empty_opening_frame": 0,
+      "extra_scene_primitives": [
+        "token-train"
+      ],
+      "grammar_version": "3.4",
+      "halo_count": 0,
+      "live_rail_width_ceiling": 2.5,
+      "live_rail_width_ceiling_passed": true,
+      "maximum_concurrent_draws": 3,
+      "maximum_live_rail_width": 2,
+      "node_motion": 0,
+      "node_motion_count": 0,
+      "nodes_visible_every_frame": true,
+      "packet_head_count": 0,
+      "persistent_packet_heads": [],
+      "persistent_stream_contract": {
+        "body": {
+          "color": "inherit-source-stroke",
+          "dash_pattern": [
+            10,
+            33
+          ],
+          "dynamic_not_thicker_than_source": true,
+          "filter_free": true,
+          "linecap": "round",
+          "linejoin": "round",
+          "marker_free": true,
+          "maximum_live_width": 2.5,
+          "opacity": 0.86,
+          "primitive": "api-token-rail",
+          "resolved_widths_in_schedule_order": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "source_widths_in_schedule_order": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "stroke_width": "min(2.5, source_stroke)"
+        },
+        "dash_offset_per_rendered_frame": -6,
+        "dash_period": 43,
+        "direction": "source-to-target",
+        "expected_initial_phases": [
+          7,
+          14,
+          21,
+          28,
+          31,
+          35,
+          38,
+          42
+        ],
+        "fade_in_factors": [
+          0.3,
+          0.65,
+          1
+        ],
+        "fade_in_frames": [
+          36,
+          38
+        ],
+        "full_opacity_frames": [
+          38,
+          109
+        ],
+        "minimum_review_scale": "50%",
+        "period_step_coprime": true,
+        "phase_policy": "(motionStage * 7 + motionOrder * 3) mod 43",
+        "phase_repeat_within_stream_interval": true,
+        "primitive": "api-token-rail",
+        "rendered_frames": [
+          36,
+          114
+        ],
+        "reset_behavior": "live rails, signatures, and scene auxiliaries keep advancing while the shared reset opacity fades to 0.03",
+        "reset_opacity_samples": [
+          1,
+          0.7575,
+          0.515,
+          0.2725,
+          0.03
+        ],
+        "reset_range": [
+          110,
+          114
+        ],
+        "signature": {
+          "animated_attributes": [
+            "transform",
+            "opacity"
+          ],
+          "appended_below_labels_and_nodes": true,
+          "direction": "source-to-target",
+          "endpoint_clearance": 10,
+          "geometry_by_route": [
+            {
+              "geometry": {
+                "cell_gap": 2,
+                "cell_height": 4,
+                "cell_opacities": [
+                  1,
+                  0.72,
+                  0.44
+                ],
+                "cell_width": 4,
+                "group_height": 8,
+                "group_width": 18,
+                "shape": "three-cell-token-train"
+              },
+              "primitive": "token-train",
+              "schedule_key": "connect/0"
+            },
+            {
+              "geometry": {
+                "cell_gap": 2,
+                "cell_height": 4,
+                "cell_opacities": [
+                  1,
+                  0.72,
+                  0.44
+                ],
+                "cell_width": 4,
+                "group_height": 8,
+                "group_width": 18,
+                "shape": "three-cell-token-train"
+              },
+              "primitive": "token-train",
+              "schedule_key": "prepare/0"
+            },
+            {
+              "geometry": {
+                "cell_gap": 2,
+                "cell_height": 4,
+                "cell_opacities": [
+                  1,
+                  0.72,
+                  0.44
+                ],
+                "cell_width": 4,
+                "group_height": 8,
+                "group_width": 18,
+                "shape": "three-cell-token-train"
+              },
+              "primitive": "token-train",
+              "schedule_key": "invoke/0"
+            },
+            {
+              "geometry": {
+                "cell_gap": 2,
+                "cell_height": 4,
+                "cell_opacities": [
+                  1,
+                  0.72,
+                  0.44
+                ],
+                "cell_width": 4,
+                "group_height": 8,
+                "group_width": 18,
+                "shape": "three-cell-token-train"
+              },
+              "primitive": "token-train",
+              "schedule_key": "tool-call/0"
+            },
+            {
+              "geometry": {
+                "cell_gap": 2,
+                "cell_height": 4,
+                "cell_opacities": [
+                  1,
+                  0.72,
+                  0.44
+                ],
+                "cell_width": 4,
+                "group_height": 8,
+                "group_width": 18,
+                "shape": "three-cell-token-train"
+              },
+              "primitive": "token-train",
+              "schedule_key": "token-stream/1"
+            },
+            {
+              "geometry": {
+                "cell_gap": 2,
+                "cell_height": 4,
+                "cell_opacities": [
+                  1,
+                  0.72,
+                  0.44
+                ],
+                "cell_width": 4,
+                "group_height": 8,
+                "group_width": 18,
+                "shape": "three-cell-token-train"
+              },
+              "primitive": "token-train",
+              "schedule_key": "govern/0"
+            },
+            {
+              "geometry": {
+                "cell_gap": 2,
+                "cell_height": 4,
+                "cell_opacities": [
+                  1,
+                  0.72,
+                  0.44
+                ],
+                "cell_width": 4,
+                "group_height": 8,
+                "group_width": 18,
+                "shape": "three-cell-token-train"
+              },
+              "primitive": "token-train",
+              "schedule_key": "measure/1"
+            },
+            {
+              "geometry": {
+                "cell_gap": 2,
+                "cell_height": 4,
+                "cell_opacities": [
+                  1,
+                  0.72,
+                  0.44
+                ],
+                "cell_width": 4,
+                "group_height": 8,
+                "group_width": 18,
+                "shape": "three-cell-token-train"
+              },
+              "primitive": "token-train",
+              "schedule_key": "promote/0"
+            }
+          ],
+          "path_advance_per_rendered_frame": 6,
+          "primitive": "token-train",
+          "signature_kind": "token-train",
+          "tangent_aware_rotation": true,
+          "wrap": "target-clearance-to-source-clearance"
+        },
+        "signature_advance_per_rendered_frame": 6,
+        "signature_count": 8,
+        "signature_primitive": "token-train",
+        "stream_count": 8,
+        "stream_interval_frame_count": 79,
+        "travel_easing": "linear",
+        "travel_pixels_per_frame_at_50_percent": 3,
+        "travel_pixels_per_frame_at_960px": 6,
+        "travel_pixels_per_second_at_50_percent_20fps": 60,
+        "travel_pixels_per_second_at_960px_20fps": 120,
+        "travel_user_units_per_rendered_frame": 6
+      },
+      "persistent_streams": [
+        {
+          "color": "#10a37f",
+          "dash_offset_per_rendered_frame": -6,
+          "dash_pattern": [
+            10,
+            33
+          ],
+          "dash_period": 43,
+          "direction": "source-to-target",
+          "dynamic_not_thicker_than_source": true,
+          "edge_id": "connect",
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_free": true,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "initial_phase": 7,
+          "marker_free": true,
+          "maximum_live_width": 2.5,
+          "motion_order": 0,
+          "motion_stage": 1,
+          "opacity": 0.86,
+          "phase_policy": "(motionStage * 7 + motionOrder * 3) mod 43",
+          "primitive": "api-token-rail",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "connect",
+          "schedule_key": "connect/0",
+          "source_stroke_width": 2,
+          "stroke_width": 2,
+          "travel_easing": "linear"
+        },
+        {
+          "color": "#0891b2",
+          "dash_offset_per_rendered_frame": -6,
+          "dash_pattern": [
+            10,
+            33
+          ],
+          "dash_period": 43,
+          "direction": "source-to-target",
+          "dynamic_not_thicker_than_source": true,
+          "edge_id": "prepare",
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_free": true,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "initial_phase": 14,
+          "marker_free": true,
+          "maximum_live_width": 2.5,
+          "motion_order": 0,
+          "motion_stage": 2,
+          "opacity": 0.86,
+          "phase_policy": "(motionStage * 7 + motionOrder * 3) mod 43",
+          "primitive": "api-token-rail",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "prepare",
+          "schedule_key": "prepare/0",
+          "source_stroke_width": 2,
+          "stroke_width": 2,
+          "travel_easing": "linear"
+        },
+        {
+          "color": "#10a37f",
+          "dash_offset_per_rendered_frame": -6,
+          "dash_pattern": [
+            10,
+            33
+          ],
+          "dash_period": 43,
+          "direction": "source-to-target",
+          "dynamic_not_thicker_than_source": true,
+          "edge_id": "invoke",
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_free": true,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "initial_phase": 21,
+          "marker_free": true,
+          "maximum_live_width": 2.5,
+          "motion_order": 0,
+          "motion_stage": 3,
+          "opacity": 0.86,
+          "phase_policy": "(motionStage * 7 + motionOrder * 3) mod 43",
+          "primitive": "api-token-rail",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "invoke",
+          "schedule_key": "invoke/0",
+          "source_stroke_width": 2,
+          "stroke_width": 2,
+          "travel_easing": "linear"
+        },
+        {
+          "color": "#0891b2",
+          "dash_offset_per_rendered_frame": -6,
+          "dash_pattern": [
+            10,
+            33
+          ],
+          "dash_period": 43,
+          "direction": "source-to-target",
+          "dynamic_not_thicker_than_source": true,
+          "edge_id": "tool-call",
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_free": true,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "initial_phase": 28,
+          "marker_free": true,
+          "maximum_live_width": 2.5,
+          "motion_order": 0,
+          "motion_stage": 4,
+          "opacity": 0.86,
+          "phase_policy": "(motionStage * 7 + motionOrder * 3) mod 43",
+          "primitive": "api-token-rail",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "tool-call",
+          "schedule_key": "tool-call/0",
+          "source_stroke_width": 2,
+          "stroke_width": 2,
+          "travel_easing": "linear"
+        },
+        {
+          "color": "#10a37f",
+          "dash_offset_per_rendered_frame": -6,
+          "dash_pattern": [
+            10,
+            33
+          ],
+          "dash_period": 43,
+          "direction": "source-to-target",
+          "dynamic_not_thicker_than_source": true,
+          "edge_id": "stream",
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_free": true,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "initial_phase": 31,
+          "marker_free": true,
+          "maximum_live_width": 2.5,
+          "motion_order": 1,
+          "motion_stage": 4,
+          "opacity": 0.86,
+          "phase_policy": "(motionStage * 7 + motionOrder * 3) mod 43",
+          "primitive": "api-token-rail",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "token-stream",
+          "schedule_key": "token-stream/1",
+          "source_stroke_width": 2,
+          "stroke_width": 2,
+          "travel_easing": "linear"
+        },
+        {
+          "color": "#475569",
+          "dash_offset_per_rendered_frame": -6,
+          "dash_pattern": [
+            10,
+            33
+          ],
+          "dash_period": 43,
+          "direction": "source-to-target",
+          "dynamic_not_thicker_than_source": true,
+          "edge_id": "govern",
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_free": true,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "initial_phase": 35,
+          "marker_free": true,
+          "maximum_live_width": 2.5,
+          "motion_order": 0,
+          "motion_stage": 5,
+          "opacity": 0.86,
+          "phase_policy": "(motionStage * 7 + motionOrder * 3) mod 43",
+          "primitive": "api-token-rail",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "govern",
+          "schedule_key": "govern/0",
+          "source_stroke_width": 2,
+          "stroke_width": 2,
+          "travel_easing": "linear"
+        },
+        {
+          "color": "#475569",
+          "dash_offset_per_rendered_frame": -6,
+          "dash_pattern": [
+            10,
+            33
+          ],
+          "dash_period": 43,
+          "direction": "source-to-target",
+          "dynamic_not_thicker_than_source": true,
+          "edge_id": "measure",
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_free": true,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "initial_phase": 38,
+          "marker_free": true,
+          "maximum_live_width": 2.5,
+          "motion_order": 1,
+          "motion_stage": 5,
+          "opacity": 0.86,
+          "phase_policy": "(motionStage * 7 + motionOrder * 3) mod 43",
+          "primitive": "api-token-rail",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "measure",
+          "schedule_key": "measure/1",
+          "source_stroke_width": 2,
+          "stroke_width": 2,
+          "travel_easing": "linear"
+        },
+        {
+          "color": "#475569",
+          "dash_offset_per_rendered_frame": -6,
+          "dash_pattern": [
+            10,
+            33
+          ],
+          "dash_period": 43,
+          "direction": "source-to-target",
+          "dynamic_not_thicker_than_source": true,
+          "edge_id": "promote",
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_free": true,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "initial_phase": 42,
+          "marker_free": true,
+          "maximum_live_width": 2.5,
+          "motion_order": 0,
+          "motion_stage": 6,
+          "opacity": 0.86,
+          "phase_policy": "(motionStage * 7 + motionOrder * 3) mod 43",
+          "primitive": "api-token-rail",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "promote",
+          "schedule_key": "promote/0",
+          "source_stroke_width": 2,
+          "stroke_width": 2,
+          "travel_easing": "linear"
+        }
+      ],
+      "preset": "token-stream",
+      "primitive": "connector-draw-on-with-persistent-data-flow",
+      "reset_opacity_samples": [
+        1,
+        0.7575,
+        0.515,
+        0.2725,
+        0.03
+      ],
+      "reset_range": [
+        110,
+        114
+      ],
+      "ripple_count": 0,
+      "route_label_clones": 8,
+      "route_label_opacity_states": 8,
+      "scene_identity": "OpenAI Official",
+      "schedule_key": "(data-motion-role, data-motion-order)",
+      "settled_marker_clones": 8,
+      "settled_topology_dynamic": true,
+      "signature_kind": "token-train",
+      "signature_travel_at_100_percent": 6,
+      "signature_travel_at_50_percent": 3,
+      "source_edges": 8,
+      "source_edges_hidden_by_transient_css": true,
+      "source_geometry_mutation_count": 0,
+      "source_marker_mutation_count": 0,
+      "source_route_labels": 8,
+      "source_text_mutation_count": 0,
+      "specialized_signature_count": 8,
+      "specialized_signatures": [
+        {
+          "animated_attributes": [
+            "transform",
+            "opacity"
+          ],
+          "appended_below_labels_and_nodes": true,
+          "center_travel_range": [
+            18,
+            92
+          ],
+          "direction": "source-to-target",
+          "edge_id": "connect",
+          "endpoint_clearance": 10,
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_boundary_valid": true,
+          "filtered_element_count": 0,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "geometry": {
+            "cell_gap": 2,
+            "cell_height": 4,
+            "cell_opacities": [
+              1,
+              0.72,
+              0.44
+            ],
+            "cell_width": 4,
+            "group_height": 8,
+            "group_width": 18,
+            "shape": "three-cell-token-train"
+          },
+          "geometry_forward_extent": 8,
+          "geometry_rear_extent": 8,
+          "initial_path_distance": 25,
+          "initial_point": {
+            "x": 285,
+            "y": 183
+          },
+          "initial_tangent_rotation": 0,
+          "marker_free": true,
+          "path_advance_per_rendered_frame": 6,
+          "path_length": 110,
+          "primitive": "token-train",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "connect",
+          "schedule_key": "connect/0",
+          "signature_family": "token-train",
+          "source_color": "#10a37f",
+          "travel_pixels_per_rendered_frame_at_50_percent": 3,
+          "wrap": "target-clearance-to-source-clearance"
+        },
+        {
+          "animated_attributes": [
+            "transform",
+            "opacity"
+          ],
+          "appended_below_labels_and_nodes": true,
+          "center_travel_range": [
+            18,
+            422
+          ],
+          "direction": "source-to-target",
+          "edge_id": "prepare",
+          "endpoint_clearance": 10,
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_boundary_valid": true,
+          "filtered_element_count": 0,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "geometry": {
+            "cell_gap": 2,
+            "cell_height": 4,
+            "cell_opacities": [
+              1,
+              0.72,
+              0.44
+            ],
+            "cell_width": 4,
+            "group_height": 8,
+            "group_width": 18,
+            "shape": "three-cell-token-train"
+          },
+          "geometry_forward_extent": 8,
+          "geometry_rear_extent": 8,
+          "initial_path_distance": 32,
+          "initial_point": {
+            "x": 480,
+            "y": 242
+          },
+          "initial_tangent_rotation": 90,
+          "marker_free": true,
+          "path_advance_per_rendered_frame": 6,
+          "path_length": 440,
+          "primitive": "token-train",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "prepare",
+          "schedule_key": "prepare/0",
+          "signature_family": "token-train",
+          "source_color": "#0891b2",
+          "travel_pixels_per_rendered_frame_at_50_percent": 3,
+          "wrap": "target-clearance-to-source-clearance"
+        },
+        {
+          "animated_attributes": [
+            "transform",
+            "opacity"
+          ],
+          "appended_below_labels_and_nodes": true,
+          "center_travel_range": [
+            18,
+            92
+          ],
+          "direction": "source-to-target",
+          "edge_id": "invoke",
+          "endpoint_clearance": 10,
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_boundary_valid": true,
+          "filtered_element_count": 0,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "geometry": {
+            "cell_gap": 2,
+            "cell_height": 4,
+            "cell_opacities": [
+              1,
+              0.72,
+              0.44
+            ],
+            "cell_width": 4,
+            "group_height": 8,
+            "group_width": 18,
+            "shape": "three-cell-token-train"
+          },
+          "geometry_forward_extent": 8,
+          "geometry_rear_extent": 8,
+          "initial_path_distance": 39,
+          "initial_point": {
+            "x": 299,
+            "y": 365
+          },
+          "initial_tangent_rotation": 0,
+          "marker_free": true,
+          "path_advance_per_rendered_frame": 6,
+          "path_length": 110,
+          "primitive": "token-train",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "invoke",
+          "schedule_key": "invoke/0",
+          "signature_family": "token-train",
+          "source_color": "#10a37f",
+          "travel_pixels_per_rendered_frame_at_50_percent": 3,
+          "wrap": "target-clearance-to-source-clearance"
+        },
+        {
+          "animated_attributes": [
+            "transform",
+            "opacity"
+          ],
+          "appended_below_labels_and_nodes": true,
+          "center_travel_range": [
+            18,
+            92
+          ],
+          "direction": "source-to-target",
+          "edge_id": "tool-call",
+          "endpoint_clearance": 10,
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_boundary_valid": true,
+          "filtered_element_count": 0,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "geometry": {
+            "cell_gap": 2,
+            "cell_height": 4,
+            "cell_opacities": [
+              1,
+              0.72,
+              0.44
+            ],
+            "cell_width": 4,
+            "group_height": 8,
+            "group_width": 18,
+            "shape": "three-cell-token-train"
+          },
+          "geometry_forward_extent": 8,
+          "geometry_rear_extent": 8,
+          "initial_path_distance": 46,
+          "initial_point": {
+            "x": 636,
+            "y": 365
+          },
+          "initial_tangent_rotation": 0,
+          "marker_free": true,
+          "path_advance_per_rendered_frame": 6,
+          "path_length": 110,
+          "primitive": "token-train",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "tool-call",
+          "schedule_key": "tool-call/0",
+          "signature_family": "token-train",
+          "source_color": "#0891b2",
+          "travel_pixels_per_rendered_frame_at_50_percent": 3,
+          "wrap": "target-clearance-to-source-clearance"
+        },
+        {
+          "animated_attributes": [
+            "transform",
+            "opacity"
+          ],
+          "appended_below_labels_and_nodes": true,
+          "center_travel_range": [
+            18,
+            412
+          ],
+          "direction": "source-to-target",
+          "edge_id": "stream",
+          "endpoint_clearance": 10,
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_boundary_valid": true,
+          "filtered_element_count": 0,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "geometry": {
+            "cell_gap": 2,
+            "cell_height": 4,
+            "cell_opacities": [
+              1,
+              0.72,
+              0.44
+            ],
+            "cell_width": 4,
+            "group_height": 8,
+            "group_width": 18,
+            "shape": "three-cell-token-train"
+          },
+          "geometry_forward_extent": 8,
+          "geometry_rear_extent": 8,
+          "initial_path_distance": 49,
+          "initial_point": {
+            "x": 455,
+            "y": 414.0000305175781
+          },
+          "initial_tangent_rotation": 180,
+          "marker_free": true,
+          "path_advance_per_rendered_frame": 6,
+          "path_length": 430,
+          "primitive": "token-train",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "token-stream",
+          "schedule_key": "token-stream/1",
+          "signature_family": "token-train",
+          "source_color": "#10a37f",
+          "travel_pixels_per_rendered_frame_at_50_percent": 3,
+          "wrap": "target-clearance-to-source-clearance"
+        },
+        {
+          "animated_attributes": [
+            "transform",
+            "opacity"
+          ],
+          "appended_below_labels_and_nodes": true,
+          "center_travel_range": [
+            18,
+            102
+          ],
+          "direction": "source-to-target",
+          "edge_id": "govern",
+          "endpoint_clearance": 10,
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_boundary_valid": true,
+          "filtered_element_count": 0,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "geometry": {
+            "cell_gap": 2,
+            "cell_height": 4,
+            "cell_opacities": [
+              1,
+              0.72,
+              0.44
+            ],
+            "cell_width": 4,
+            "group_height": 8,
+            "group_width": 18,
+            "shape": "three-cell-token-train"
+          },
+          "geometry_forward_extent": 8,
+          "geometry_rear_extent": 8,
+          "initial_path_distance": 53,
+          "initial_point": {
+            "x": 790,
+            "y": 443
+          },
+          "initial_tangent_rotation": 90,
+          "marker_free": true,
+          "path_advance_per_rendered_frame": 6,
+          "path_length": 120,
+          "primitive": "token-train",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "govern",
+          "schedule_key": "govern/0",
+          "signature_family": "token-train",
+          "source_color": "#475569",
+          "travel_pixels_per_rendered_frame_at_50_percent": 3,
+          "wrap": "target-clearance-to-source-clearance"
+        },
+        {
+          "animated_attributes": [
+            "transform",
+            "opacity"
+          ],
+          "appended_below_labels_and_nodes": true,
+          "center_travel_range": [
+            18,
+            112
+          ],
+          "direction": "source-to-target",
+          "edge_id": "measure",
+          "endpoint_clearance": 10,
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_boundary_valid": true,
+          "filtered_element_count": 0,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "geometry": {
+            "cell_gap": 2,
+            "cell_height": 4,
+            "cell_opacities": [
+              1,
+              0.72,
+              0.44
+            ],
+            "cell_width": 4,
+            "group_height": 8,
+            "group_width": 18,
+            "shape": "three-cell-token-train"
+          },
+          "geometry_forward_extent": 8,
+          "geometry_rear_extent": 8,
+          "initial_path_distance": 56,
+          "initial_point": {
+            "x": 316,
+            "y": 540
+          },
+          "initial_tangent_rotation": 0,
+          "marker_free": true,
+          "path_advance_per_rendered_frame": 6,
+          "path_length": 130,
+          "primitive": "token-train",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "measure",
+          "schedule_key": "measure/1",
+          "signature_family": "token-train",
+          "source_color": "#475569",
+          "travel_pixels_per_rendered_frame_at_50_percent": 3,
+          "wrap": "target-clearance-to-source-clearance"
+        },
+        {
+          "animated_attributes": [
+            "transform",
+            "opacity"
+          ],
+          "appended_below_labels_and_nodes": true,
+          "center_travel_range": [
+            18,
+            112
+          ],
+          "direction": "source-to-target",
+          "edge_id": "promote",
+          "endpoint_clearance": 10,
+          "fade_in_frames": [
+            36,
+            38
+          ],
+          "filter_boundary_valid": true,
+          "filtered_element_count": 0,
+          "full_opacity_frames": [
+            38,
+            109
+          ],
+          "geometry": {
+            "cell_gap": 2,
+            "cell_height": 4,
+            "cell_opacities": [
+              1,
+              0.72,
+              0.44
+            ],
+            "cell_width": 4,
+            "group_height": 8,
+            "group_width": 18,
+            "shape": "three-cell-token-train"
+          },
+          "geometry_forward_extent": 8,
+          "geometry_rear_extent": 8,
+          "initial_path_distance": 60,
+          "initial_point": {
+            "x": 630,
+            "y": 540
+          },
+          "initial_tangent_rotation": 0,
+          "marker_free": true,
+          "path_advance_per_rendered_frame": 6,
+          "path_length": 130,
+          "primitive": "token-train",
+          "rendered_frames": [
+            36,
+            114
+          ],
+          "role": "promote",
+          "schedule_key": "promote/0",
+          "signature_family": "token-train",
+          "source_color": "#475569",
+          "travel_pixels_per_rendered_frame_at_50_percent": 3,
+          "wrap": "target-clearance-to-source-clearance"
+        }
+      ],
+      "static_dom_guard": true,
+      "stream_count": 8,
+      "text_geometry_motion": 0,
+      "text_motion": 0,
+      "text_motion_count": 0,
+      "topology_draw_on": true,
+      "trace_span_reveals": [],
+      "waterfall_scanner": null
+    },
+    "width": 960
+  },
+  "report": "d:\\4Project\\tech-graph\\output\\demo.motion.json",
+  "required_encoder": "ffmpeg/gif",
+  "review_reference_source_sha256": "ce07fd5279c5709b4546c59007068ca678b92122ed740d43270ecd22f7bbf82b",
+  "review_status": "user-approved",
+  "runtime": {
+    "encoders": [
+      "gif"
+    ],
+    "ffmpeg": "E:\\ffmpeg-master-latest-win64-gpl\\bin\\ffmpeg.EXE",
+    "ffprobe": "E:\\ffmpeg-master-latest-win64-gpl\\bin\\ffprobe.EXE",
+    "format": {
+      "gif": true
+    },
+    "node": "D:\\nodejs\\node.EXE",
+    "ok": true,
+    "renderer": {
+      "chrome": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      "deterministic_timeline": true,
+      "input": "semantic-svg",
+      "module": "FIREWORKS_PUPPETEER_PATH",
+      "module_version": "25.3.0",
+      "motion_model": "connector-draw-on-with-persistent-data-flow",
+      "ok": true,
+      "presets": [
+        "memory-weave",
+        "tool-grounding",
+        "service-blueprint",
+        "memory-lifecycle",
+        "agent-orchestration",
+        "governed-runtime",
+        "token-stream",
+        "golden-circuit",
+        "review-trace",
+        "cloud-flow",
+        "event-transit",
+        "ops-pulse"
+      ],
+      "resolved_module": "C:\\Users\\Administrator\\.codebuddy\\skills\\fireworks-tech-graph\\node_modules\\puppeteer-core\\lib\\puppeteer\\puppeteer-core.js",
+      "sandbox_default": "enabled"
+    },
+    "worker": "C:\\Users\\Administrator\\.codebuddy\\skills\\fireworks-tech-graph\\scripts\\svg2gif.js"
+  },
+  "scene_signature": {
+    "distinctive_primitives": [
+      "semantic-route-build",
+      "api-token-rail",
+      "token-train"
+    ],
+    "name": "openai-official-api-token-train"
+  },
+  "seamless_loop_contract": "75 frames or fewer: every raster is unique; more than 75 frames: non-adjacent repeats are allowed within the full-opacity interval, plus the sole intentional reset-boundary exception at reset_start with opacity 1.00, with at least 75 unique rasters; seam MAD must not exceed p95 adjacent-frame MAD",
+  "semantic_profile": "generic",
+  "semantics": {
+    "edges": 8,
+    "edges_without_flow": 0,
+    "motion_metadata": "explicit",
+    "nodes": 8,
+    "resolved_schedule": [
+      {
+        "edge_id": "connect",
+        "order": 0,
+        "role": "connect",
+        "source_stroke": "#10a37f",
+        "stage": 1
+      },
+      {
+        "edge_id": "prepare",
+        "order": 0,
+        "role": "prepare",
+        "source_stroke": "#0891b2",
+        "stage": 2
+      },
+      {
+        "edge_id": "invoke",
+        "order": 0,
+        "role": "invoke",
+        "source_stroke": "#10a37f",
+        "stage": 3
+      },
+      {
+        "edge_id": "tool-call",
+        "order": 0,
+        "role": "tool-call",
+        "source_stroke": "#0891b2",
+        "stage": 4
+      },
+      {
+        "edge_id": "stream",
+        "order": 1,
+        "role": "token-stream",
+        "source_stroke": "#10a37f",
+        "stage": 4
+      },
+      {
+        "edge_id": "govern",
+        "order": 0,
+        "role": "govern",
+        "source_stroke": "#475569",
+        "stage": 5
+      },
+      {
+        "edge_id": "measure",
+        "order": 1,
+        "role": "measure",
+        "source_stroke": "#475569",
+        "stage": 5
+      },
+      {
+        "edge_id": "promote",
+        "order": 0,
+        "role": "promote",
+        "source_stroke": "#475569",
+        "stage": 6
+      }
+    ],
+    "schedule_key": "(data-motion-role, data-motion-order)",
+    "staged_edges": 8
+  },
+  "size_guidance": {
+    "artifact_target_bytes": 500000,
+    "artifact_within_target": true,
+    "warnings": []
+  },
+  "source": "d:\\4Project\\tech-graph\\output\\demo.svg",
+  "source_checks": {
+    "composition": {
+      "details": [],
+      "ok": true
+    },
+    "geometry": {
+      "details": [],
+      "ok": true
+    },
+    "markers": {
+      "details": [],
+      "ok": true
+    },
+    "xml": {
+      "details": [],
+      "ok": true
+    }
+  },
+  "source_integrity": {
+    "sha256": "20d605a4abfc1fbd7a4db9d8f8a2066e21cef36e9a854d66d62f307d02af4d1c",
+    "sha256_after": "20d605a4abfc1fbd7a4db9d8f8a2066e21cef36e9a854d66d62f307d02af4d1c",
+    "sha256_before": "20d605a4abfc1fbd7a4db9d8f8a2066e21cef36e9a854d66d62f307d02af4d1c",
+    "unchanged": true
+  },
+  "source_sha256": "20d605a4abfc1fbd7a4db9d8f8a2066e21cef36e9a854d66d62f307d02af4d1c",
+  "style_contract": {
+    "approval_recorded_on": "2026-07-16",
+    "scope": "signature-speed-path-geometry-and-construction-schedule",
+    "source_policy": "semantic-schedule-and-geometry-not-exact-byte-hash",
+    "status": "user-approved"
+  },
+  "style_contract_status": "user-approved",
+  "style_id": 7,
+  "timing_revision": {
+    "approved_at": "2026-07-17",
+    "baseline": {
+      "duration_seconds": 3.75,
+      "frame_count": 75
+    },
+    "candidate": {
+      "added_full_opacity_frames": [
+        70,
+        109
+      ],
+      "duration_seconds": 5.75,
+      "frame_count": 115
+    },
+    "id": "+2s-settled-flow",
+    "only_pending_item": false,
+    "status": "user-approved"
+  },
+  "visual_theme": "OpenAI",
+  "width": 960
+}
