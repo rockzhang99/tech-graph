@@ -317,6 +317,124 @@ body::before {
 }
 .stage.dragging .drop-mask { display: grid; }
 
+/* ---------------- 提示词生成 ---------------- */
+.ai-block {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(124, 140, 255, .26);
+  background: linear-gradient(160deg, rgba(124, 140, 255, .09), rgba(217, 70, 239, .05));
+}
+
+.ai-source {
+  font-size: 10.5px;
+  padding: 4px 9px;
+  border-radius: 20px;
+  align-self: flex-start;
+  background: rgba(139, 147, 167, .14);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.ai-source.llm {
+  background: rgba(52, 211, 153, .14);
+  color: #6ee7b7;
+  border-color: rgba(52, 211, 153, .34);
+}
+
+.prompt {
+  width: 100%;
+  min-height: 88px;
+  padding: 10px;
+  border-radius: 9px;
+  background: #0a0c13;
+  border: 1px solid var(--border);
+  color: #dfe4f0;
+  font: 12.5px/1.6 inherit;
+  resize: vertical;
+}
+.prompt::placeholder { color: #4a5266; }
+.prompt:focus { outline: none; border-color: var(--accent); }
+
+.ai-actions { display: flex; gap: 6px; }
+
+.gen-status {
+  font-size: 11px;
+  padding: 7px 9px;
+  border-radius: 7px;
+  background: rgba(251, 191, 36, .1);
+  border-left: 2px solid var(--warn);
+  color: #fcd34d;
+  line-height: 1.55;
+}
+.gen-status.ok {
+  background: rgba(52, 211, 153, .1);
+  border-color: var(--ok);
+  color: #6ee7b7;
+}
+.gen-status.err {
+  background: rgba(248, 113, 113, .1);
+  border-color: var(--err);
+  color: #fca5a5;
+}
+
+/* ---------------- 表单 ---------------- */
+.form-body { display: flex; flex-direction: column; gap: 13px; }
+
+.form-tip { font-size: 11.5px; line-height: 1.65; color: var(--muted); }
+.form-tip.dim { font-size: 10.5px; color: var(--dim); }
+.form-tip code { background: var(--panel-2); padding: 1px 4px; border-radius: 4px; font-size: 10px; }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field > span { font-size: 11.5px; color: var(--muted); }
+.field-row { display: flex; gap: 6px; align-items: center; }
+.field-row .input { flex: 1; }
+
+.input {
+  padding: 7px 9px;
+  border-radius: 8px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 12px;
+  font-family: inherit;
+}
+.input:focus { outline: none; border-color: var(--accent); }
+
+.switch { position: relative; display: inline-block; width: 40px; height: 21px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch i {
+  position: absolute; inset: 0;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 21px;
+  transition: .18s;
+  cursor: pointer;
+}
+.switch i::before {
+  content: "";
+  position: absolute;
+  width: 15px; height: 15px;
+  left: 2px; top: 2px;
+  background: var(--muted);
+  border-radius: 50%;
+  transition: .18s;
+}
+.switch input:checked + i { background: rgba(124, 140, 255, .3); border-color: var(--accent); }
+.switch input:checked + i::before { transform: translateX(19px); background: #fff; }
+
+.form-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+.form-msg {
+  font-size: 11.5px;
+  padding: 7px 9px;
+  border-radius: 7px;
+  background: rgba(124, 140, 255, .1);
+  border: 1px solid rgba(124, 140, 255, .3);
+  color: #a5b4fc;
+  white-space: pre-wrap;
+}
+.form-msg.ok { background: rgba(52,211,153,.1); border-color: rgba(52,211,153,.3); color: #6ee7b7; }
+.form-msg.err { background: rgba(248,113,113,.1); border-color: rgba(248,113,113,.3); color: #fca5a5; }
+
 /* ---------------- 门禁 ---------------- */
 .gates { display: flex; flex-direction: column; gap: 5px; }
 

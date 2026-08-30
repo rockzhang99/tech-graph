@@ -91,6 +91,7 @@ async function init() {
   await loadExamples();
   bindEvents();
   refreshDoctor();
+  loadConfig();
   const first = state.types[0];
   if (first) selectType(first.id);
   const style = state.styles.find((s) => s.id === 1) || state.styles[0];
@@ -153,8 +154,23 @@ function selectStyle(id) {
   if (style && !style.renderable) {
     warn.hidden = false;
     warn.textContent = `Style ${id}（${style.zh}）为 AI 手绘风格，不接受 JSON 渲染，请改用其他风格。`;
+  } else if (style && style.auto === false) {
+    warn.hidden = false;
+    warn.textContent =
+      `Style ${id}（${style.zh}）是工程评审专用风格，需要领域数据，提示词生成暂不支持。` +
+      `可从下方「示例」选择该风格样例，或手写 JSON。`;
   } else {
     warn.hidden = true;
+  }
+
+  // 提示词生成入口随风格可用性开关
+  const btn = $("btnGenerate");
+  if (style && style.auto === false) {
+    btn.disabled = true;
+    btn.title = "该风格不支持提示词生成";
+  } else {
+    btn.disabled = false;
+    btn.title = "";
   }
 }
 
@@ -349,6 +365,200 @@ function renderReport(report, checks) {
   }
 
   box.innerHTML = html || '<p class="muted">无额外报告字段。</p>';
+}
+
+/* ---------------------------------------------------------------- 提示词生成 */
+
+function setGenStatus(message, kind) {
+  const el = $("genStatus");
+  if (!message) {
+    el.hidden = true;
+    return;
+  }
+  el.hidden = false;
+  el.className = `gen-status ${kind || ""}`;
+  el.textContent = message;
+}
+
+function updateAiSource() {
+  const el = $("aiSource");
+  const cfg = state.config || {};
+  if (cfg.enabled && cfg.has_key) {
+    el.className = "ai-source llm";
+    el.textContent = `大模型 · ${cfg.model || "未指定模型"}`;
+  } else {
+    el.className = "ai-source";
+    el.textContent = "本地解析（无需 API Key）";
+  }
+}
+
+async function loadConfig() {
+  try {
+    const data = await api("/api/config");
+    state.config = data;
+    updateAiSource();
+    $("cfgPath").textContent = data.config_path || "";
+  } catch {
+    state.config = { enabled: false };
+    updateAiSource();
+  }
+}
+
+async function generateFromPrompt() {
+  const prompt = $("prompt").value.trim();
+  if (!prompt) {
+    setGenStatus("请先输入描述内容。", "err");
+    $("prompt").focus();
+    return;
+  }
+  const btn = $("btnGenerate");
+  const label = btn.querySelector(".btn-label");
+  const original = label.textContent;
+  btn.disabled = true;
+  label.textContent = "生成中…";
+  setGenStatus("正在解析描述并计算布局…", "");
+
+  try {
+    const result = await post("/api/generate", {
+      prompt,
+      mode: state.mode,
+      style: state.style,
+      lang: "auto",
+    });
+
+    if (result.svg) {
+      $("editor").value = JSON.stringify(result.spec, null, 2);
+      applySvg(result.svg, {
+        report: result.report,
+        checks: result.checks,
+        mode: state.mode,
+      });
+      $("previewTitle").textContent = result.spec.title || "技术图";
+      const nodeCount = (result.spec.nodes || []).length;
+      const edgeCount = (result.spec.arrows || []).length;
+
+      if (result.passed) {
+        setGenStatus(`已生成 ${nodeCount} 个节点 / ${edgeCount} 条连线，全部门禁通过。`, "ok");
+        toast("生成完成", "ok");
+      } else {
+        setGenStatus(`已生成 ${nodeCount} 个节点 / ${edgeCount} 条连线，有门禁未通过，可在右侧查看明细后微调 JSON。`, "err");
+      }
+      if (result.fallback_reason) {
+        setGenStatus(`大模型不可用，已回退本地解析：${result.fallback_reason}`, "err");
+      }
+    } else {
+      setGenStatus(result.error || "生成失败", "err");
+      toast(result.error || "生成失败", "err", 6000);
+    }
+  } catch (err) {
+    setGenStatus(err.message, "err");
+    toast(err.message, "err", 7000);
+  } finally {
+    btn.disabled = false;
+    label.textContent = original;
+  }
+}
+
+/* ---------------------------------------------------------------- 模型设置 */
+
+async function openConfigModal() {
+  $("configModal").hidden = false;
+  $("configMsg").hidden = true;
+  try {
+    const data = await api("/api/config");
+    state.config = data;
+    $("cfgEnabled").checked = !!data.config.enabled;
+    $("cfgBaseUrl").value = data.config.base_url || "";
+    $("cfgApiKey").value = "";
+    $("cfgApiKey").placeholder = data.has_key ? "已保存，留空则不修改" : "sk-...";
+    $("cfgModel").value = data.config.model || "";
+    $("cfgTemp").value = data.config.temperature ?? 0.2;
+    $("tempLabel").textContent = String(data.config.temperature ?? 0.2);
+    $("cfgPath").textContent = data.config_path || "";
+  } catch (err) {
+    showConfigMsg(`读取配置失败：${err.message}`, "err");
+  }
+}
+
+function showConfigMsg(message, kind) {
+  const el = $("configMsg");
+  el.hidden = false;
+  el.className = `form-msg ${kind || ""}`;
+  el.textContent = message;
+}
+
+async function saveConfig() {
+  const payload = {
+    enabled: $("cfgEnabled").checked,
+    base_url: $("cfgBaseUrl").value.trim(),
+    api_key: $("cfgApiKey").value.trim() || "***",
+    model: $("cfgModel").value.trim(),
+    temperature: Number($("cfgTemp").value),
+    lang: "auto",
+  };
+  if (!payload.api_key || payload.api_key === "***") {
+    if (!(state.config && state.config.has_key)) {
+      showConfigMsg("请填写 API Key。", "err");
+      return;
+    }
+  }
+  try {
+    await post("/api/config", payload);
+    showConfigMsg("已保存到本机。", "ok");
+    await loadConfig();
+    updateAiSource();
+  } catch (err) {
+    showConfigMsg(`保存失败：${err.message}`, "err");
+  }
+}
+
+async function testConfig() {
+  const btn = $("btnTestConfig");
+  btn.disabled = true;
+  const original = btn.textContent;
+  btn.textContent = "测试中…";
+  showConfigMsg("正在连接…", "");
+  try {
+    // 先落盘再测，确保测的是用户刚填的值
+    await post("/api/config", {
+      enabled: $("cfgEnabled").checked,
+      base_url: $("cfgBaseUrl").value.trim(),
+      api_key: $("cfgApiKey").value.trim() || "***",
+      model: $("cfgModel").value.trim(),
+      temperature: Number($("cfgTemp").value),
+      lang: "auto",
+    });
+    const result = await api("/api/config/test");
+    showConfigMsg(`连接成功：${result.reply || "ok"}`, "ok");
+    await loadConfig();
+    updateAiSource();
+  } catch (err) {
+    showConfigMsg(`连接失败：${err.message}`, "err");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+}
+
+async function fetchModels() {
+  const btn = $("btnFetchModels");
+  btn.disabled = true;
+  const original = btn.textContent;
+  btn.textContent = "…";
+  try {
+    const result = await api("/api/config/models");
+    const list = result.models || [];
+    $("modelList").innerHTML = list
+      .slice(0, 200)
+      .map((m) => `<option value="${escapeHtml(m)}"></option>`)
+      .join("");
+    showConfigMsg(`已拉取 ${list.length} 个模型，可在输入框选择。`, "ok");
+  } catch (err) {
+    showConfigMsg(`拉取失败：${err.message}`, "err");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
 }
 
 /* ---------------------------------------------------------------- 导出 */
@@ -623,6 +833,18 @@ function bindEvents() {
   $("btnHtml").addEventListener("click", exportHtml);
   $("btnGif").addEventListener("click", exportGif);
 
+  $("btnGenerate").addEventListener("click", generateFromPrompt);
+  $("btnAiSettings").addEventListener("click", openConfigModal);
+
+  $("configModalClose").addEventListener("click", () => ($("configModal").hidden = true));
+  $("configModal").addEventListener("click", (e) => {
+    if (e.target === $("configModal")) $("configModal").hidden = true;
+  });
+  $("btnSaveConfig").addEventListener("click", saveConfig);
+  $("btnTestConfig").addEventListener("click", testConfig);
+  $("btnFetchModels").addEventListener("click", fetchModels);
+  $("cfgTemp").addEventListener("input", (e) => ($("tempLabel").textContent = e.target.value));
+
   $("btnDoctor").addEventListener("click", showDoctorModal);
   $("modalClose").addEventListener("click", () => ($("modal").hidden = true));
   $("modal").addEventListener("click", (e) => {
@@ -688,6 +910,7 @@ function bindEvents() {
     if (e.key === "Escape") {
       $("modal").hidden = true;
       $("jsonModal").hidden = true;
+      $("configModal").hidden = true;
     }
   });
 

@@ -38,6 +38,7 @@
         <h2>1 · 图类型</h2>
         <span id="typeHint" class="hint">960 × 600</span>
       </div>
+      <!-- 风格区块紧随其后 -->
       <div id="typeChips" class="chips"></div>
     </section>
 
@@ -46,13 +47,32 @@
         <h2>2 · 视觉风格</h2>
         <span id="styleHint" class="hint">Style 1</span>
       </div>
+      <!-- 图类型标题在上方 -->
       <div id="styleChips" class="chips styles"></div>
       <p id="styleWarn" class="warn" hidden></p>
     </section>
 
+    <section class="block ai-block">
+      <div class="block-head">
+        <h2>3 · 提示词生成</h2>
+        <div class="head-actions">
+          <button id="btnAiSettings" class="btn tiny" type="button">模型设置</button>
+        </div>
+      </div>
+      <div id="aiSource" class="ai-source">本地解析（无需 API Key）</div>
+      <textarea id="prompt" class="prompt" spellcheck="false"
+        placeholder="用自然语言描述你要画的图，例如：&#10;RAG 流程：用户查询 → 向量化 → 向量库检索 → 大模型生成 → 答案"></textarea>
+      <div class="ai-actions">
+        <button id="btnGenerate" class="btn primary block-btn" type="button">
+          <span class="btn-label">生成图表</span>
+        </button>
+      </div>
+      <div id="genStatus" class="gen-status" hidden></div>
+    </section>
+
     <section class="block">
       <div class="block-head">
-        <h2>3 · 图规格 JSON</h2>
+        <h2>4 · 图规格 JSON</h2>
         <div class="head-actions">
           <button id="btnExample" class="btn tiny" type="button">示例</button>
           <button id="btnLoadSpec" class="btn tiny" type="button">导入</button>
@@ -156,6 +176,62 @@
     </section>
   </aside>
 </main>
+
+<!-- 模型设置弹窗 -->
+<div id="configModal" class="modal" hidden>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>大模型设置（可选）</h3>
+      <button id="configModalClose" class="btn tiny" type="button">关闭</button>
+    </div>
+    <div class="modal-body form-body">
+      <p class="form-tip">
+        不配置也能用：内置本地解析器会把「A → B → C」这类描述直接转成图。
+        接入大模型后，可以理解更复杂的自然语言。支持任何 OpenAI 兼容接口
+        （OpenAI / DeepSeek / 通义 / 智谱 / 本地 Ollama 等）。
+      </p>
+
+      <label class="field">
+        <span>启用大模型</span>
+        <label class="switch">
+          <input id="cfgEnabled" type="checkbox" />
+          <i></i>
+        </label>
+      </label>
+
+      <label class="field">
+        <span>API 地址</span>
+        <input id="cfgBaseUrl" class="input" type="text" placeholder="https://api.openai.com/v1" />
+      </label>
+
+      <label class="field">
+        <span>API Key</span>
+        <input id="cfgApiKey" class="input" type="password" placeholder="sk-..." autocomplete="off" />
+      </label>
+
+      <label class="field">
+        <span>模型</span>
+        <div class="field-row">
+          <input id="cfgModel" class="input" type="text" placeholder="gpt-4o-mini" list="modelList" />
+          <button id="btnFetchModels" class="btn tiny" type="button">拉取</button>
+        </div>
+        <datalist id="modelList"></datalist>
+      </label>
+
+      <label class="field">
+        <span>创造性 <b id="tempLabel">0.2</b></span>
+        <input id="cfgTemp" type="range" min="0" max="1" step="0.1" value="0.2" />
+      </label>
+
+      <div class="form-actions">
+        <button id="btnTestConfig" class="btn ghost" type="button">测试连接</button>
+        <button id="btnSaveConfig" class="btn primary" type="button">保存</button>
+      </div>
+      <p id="configMsg" class="form-msg" hidden></p>
+      <p class="form-tip dim">Key 只保存在本机 <code id="cfgPath"></code>，不会进入 Git 仓库。</p>
+    </div>
+  </div>
+</div>
 
 <!-- 环境详情弹窗 -->
 <div id="modal" class="modal" hidden>

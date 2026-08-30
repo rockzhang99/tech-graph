@@ -77,11 +77,17 @@ if CHROME:
 
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
+if str(HERE) not in sys.path:
+    sys.path.insert(0, str(HERE))
 
 from diagram_ir import DiagramValidationError  # noqa: E402
 from interactive_html import build_interactive_html  # noqa: E402
 from motion import probe_motion_runtime, render_motion_gif  # noqa: E402
 from validate_svg import run_check  # noqa: E402
+
+import heuristic  # noqa: E402
+import layout as layout_engine  # noqa: E402
+import llm  # noqa: E402
 
 
 def _load_generator():
@@ -122,6 +128,12 @@ STYLE_NAMES = {
     11: ("Event Transit", "事件流轨道"),
     12: ("Ops Pulse", "运维脉搏"),
 }
+
+# Style 9-12 是工程评审专用风格，渲染前会执行领域契约校验，要求
+# C4 的 scope/seed、Cloud 的 icon manifest、Event 的 topic rails、Ops 的
+# 黄金信号与 trace 瀑布等结构化数据。通用布局引擎产出的图无法满足，
+# 因此不提供自动生成，引导用户改用内置示例或手写 JSON。
+AUTO_STYLES = frozenset({1, 2, 3, 4, 5, 6, 7})
 
 MOTION_PRESETS = {
     1: "memory-weave",
@@ -208,6 +220,56 @@ def _cairosvg_usable() -> tuple[bool, str]:
         return True, ""
     except Exception as exc:
         return False, f"{type(exc).__name__}: {exc}"
+
+
+# ---------------------------------------------------------------- 配置持久化
+
+# API Key 落在 .git 忽略的 runtime 目录之外会污染工作区，这里统一放到
+# 用户目录，避免被误提交。
+CONFIG_PATH = Path(
+    os.environ.get(
+        "FTG_CONFIG",
+        str(Path.home() / ".codebuddy" / "fireworks-tech-graph-config.json"),
+    )
+)
+
+DEFAULT_CONFIG: dict[str, Any] = {
+    "enabled": False,
+    "base_url": "https://api.openai.com/v1",
+    "api_key": "",
+    "model": "gpt-4o-mini",
+    "temperature": 0.2,
+    "lang": "auto",
+}
+
+
+def load_config() -> dict[str, Any]:
+    config = dict(DEFAULT_CONFIG)
+    try:
+        if CONFIG_PATH.exists():
+            stored = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+            if isinstance(stored, dict):
+                config.update({k: v for k, v in stored.items() if k in DEFAULT_CONFIG})
+    except Exception:
+        pass
+    # 环境变量优先级最高，方便无界面部署
+    env_key = os.environ.get("OPENAI_API_KEY")
+    env_url = os.environ.get("OPENAI_BASE_URL")
+    env_model = os.environ.get("OPENAI_MODEL")
+    if env_key:
+        config["api_key"] = env_key
+        config["enabled"] = True
+    if env_url:
+        config["base_url"] = env_url
+    if env_model:
+        config["model"] = env_model
+    return config
+
+
+def save_config(config: dict[str, Any]) -> None:
+    payload = {key: config.get(key, DEFAULT_CONFIG[key]) for key in DEFAULT_CONFIG}
+    CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    CONFIG_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
 def _chrome_screenshot(svg_path: Path, out: Path, width: int, height: int, scale: float) -> subprocess.CompletedProcess:
@@ -328,6 +390,22 @@ class GifRequest(SvgPayload):
     width: int = Field(default=960, ge=320, le=2400)
 
 
+class GenerateRequest(BaseModel):
+    prompt: str
+    mode: str = "architecture"
+    style: int = Field(default=1, ge=1, le=12)
+    lang: str = "auto"
+
+
+class ConfigRequest(BaseModel):
+    enabled: bool = False
+    base_url: str = ""
+    api_key: str = ""
+    model: str = ""
+    temperature: float = Field(default=0.2, ge=0.0, le=2.0)
+    lang: str = "auto"
+
+
 # ---------------------------------------------------------------- 应用
 
 app = FastAPI(title="Fireworks Tech Graph Console", version="1.0.0")
@@ -344,6 +422,7 @@ def api_meta() -> dict[str, Any]:
                 "en": en,
                 "zh": zh,
                 "renderable": index not in AI_AUTHORED_STYLES,
+                "auto": index in AUTO_STYLES,
                 "motion": MOTION_PRESETS.get(index),
             }
         )
@@ -566,6 +645,219 @@ def api_gif_status(task_id: str) -> dict[str, Any]:
 @app.post("/api/cleanup")
 def api_cleanup() -> dict[str, Any]:
     return {"ok": True, "removed": _sweep_runtime()}
+
+
+# ---------------------------------------------------------------- 提示词生成
+
+
+def _blueprint_from_llm(prompt: str, mode: str, style: int, lang: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    """调用大模型产出语义蓝图。"""
+    config = load_config()
+    raw = llm.chat_completions(
+        base_url=config["base_url"],
+        api_key=config["api_key"],
+        model=config["model"],
+        messages=llm.build_messages(prompt, mode, style, lang),
+        temperature=float(config.get("temperature") or 0.2),
+    )
+    blueprint = llm.extract_json(raw)
+    return blueprint, {"source": "llm", "model": config["model"]}
+
+
+def _repair_with_llm(
+    prompt: str, mode: str, style: int, lang: str,
+    blueprint: dict[str, Any], errors: list[str],
+) -> dict[str, Any] | None:
+    """把校验失败原因回传给模型，要求它在语义层面修正后重试。"""
+    config = load_config()
+    hint = (
+        "The previous blueprint produced a diagram that failed validation.\n"
+        "Problems:\n" + "\n".join(f"- {e}" for e in errors[:8]) + "\n\n"
+        "Common fixes: reduce the number of nodes, spread them across more "
+        "lanes, shorten labels, remove edges that would cross other edges.\n"
+        "Return the corrected JSON blueprint only."
+    )
+    messages = llm.build_messages(prompt, mode, style, lang)
+    messages.append({"role": "assistant", "content": json.dumps(blueprint, ensure_ascii=False)})
+    messages.append({"role": "user", "content": hint})
+    try:
+        raw = llm.chat_completions(
+            base_url=config["base_url"],
+            api_key=config["api_key"],
+            model=config["model"],
+            messages=messages,
+            temperature=float(config.get("temperature") or 0.2),
+        )
+        return llm.extract_json(raw)
+    except Exception:
+        return None
+
+
+def _attempt(blueprint: dict[str, Any], mode: str, style: int, gap_scale: float) -> dict[str, Any]:
+    """用给定间距系数铺一次，返回渲染结果与问题清单。"""
+    spec = layout_engine.build_spec(blueprint, mode, style, gap_scale=gap_scale)
+    data = dict(spec)
+    data["mode"] = mode
+    data["template_type"] = mode
+    try:
+        svg, report = GENERATOR.build_svg_with_report(mode, data)
+    except (DiagramValidationError, ValueError) as exc:
+        return {"ok": False, "spec": spec, "error": str(exc), "issues": [str(exc)]}
+
+    path = _write(svg)
+    checks = _run_checks(path)
+    issues: list[str] = []
+    for key, value in checks.items():
+        for detail in value.get("details", []):
+            issues.append(f"[{value.get('label', key)}] {detail}")
+    report_issues = (report or {}).get("issues") or []
+    issues.extend(str(i) for i in report_issues)
+    return {
+        "ok": all(v["ok"] for v in checks.values()),
+        "spec": spec,
+        "svg": svg,
+        "checks": checks,
+        "report": report,
+        "issues": issues,
+    }
+
+
+@app.post("/api/generate")
+def api_generate(req: GenerateRequest) -> dict[str, Any]:
+    """由自然语言提示词生成图规格并直接渲染。
+
+    流程：语义蓝图（大模型或本地启发式）→ 本地布局 → 渲染 → 门禁校验；
+    未通过则先放宽间距重排，仍失败且有大模型时把错误回传要求修正。
+    """
+    prompt = (req.prompt or "").strip()
+    if not prompt:
+        raise HTTPException(status_code=400, detail="请输入描述内容")
+
+    style = req.style
+    if style in AI_AUTHORED_STYLES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Style {style}（{AI_AUTHORED_STYLES[style]}）为 AI 手绘风格，请改用其他风格",
+        )
+    if style not in AUTO_STYLES:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                f"Style {style} 是工程评审专用风格，需要 C4 层级、部署归属、事件轨道或"
+                "可观测性指标等领域数据，提示词自动生成暂不支持。"
+                "请从「示例」下拉选择该风格的官方样例，或手写 JSON 规格。"
+            ),
+        )
+
+    config = load_config()
+    use_llm = bool(config["enabled"] and config.get("api_key") and config.get("model"))
+    attempts: list[str] = []
+
+    if use_llm:
+        try:
+            blueprint, meta = _blueprint_from_llm(prompt, req.mode, style, req.lang)
+        except llm.LLMError as exc:
+            # 大模型不可用时降级到本地解析，保证功能不中断
+            blueprint = heuristic.parse(prompt, req.mode)
+            meta = {"source": "heuristic", "fallback_reason": str(exc)}
+            attempts.append(f"大模型调用失败，已回退本地解析：{exc}")
+    else:
+        blueprint = heuristic.parse(prompt, req.mode)
+        meta = {"source": "heuristic"}
+
+    # 第一轮：标准间距
+    result = _attempt(blueprint, req.mode, style, 1.0)
+
+    # 第二轮：放宽间距重排（解决节点过密、标签碰撞）
+    if not result["ok"]:
+        attempts.append(f"标准间距未通过：{result['issues'][:3]}")
+        relaxed = _attempt(blueprint, req.mode, style, 1.6)
+        if relaxed["ok"] or (not result.get("svg") and relaxed.get("svg")):
+            result = relaxed
+
+    # 第三轮：有大模型时把错误喂回去，让它在语义层面收敛
+    if not result["ok"] and use_llm:
+        attempts.append(f"放宽间距仍未通过：{result['issues'][:3]}")
+        fixed = _repair_with_llm(prompt, req.mode, style, req.lang, blueprint, result["issues"])
+        if fixed:
+            for scale in (1.0, 1.6):
+                retried = _attempt(fixed, req.mode, style, scale)
+                if retried.get("svg"):
+                    result = retried
+                    blueprint = fixed
+                    if retried["ok"]:
+                        break
+
+    payload: dict[str, Any] = {
+        "ok": bool(result.get("svg")),
+        "source": meta.get("source"),
+        "model": meta.get("model"),
+        "fallback_reason": meta.get("fallback_reason"),
+        "spec": result["spec"],
+        "blueprint": blueprint,
+        "attempts": attempts,
+        "issues": result.get("issues", []),
+    }
+    if result.get("svg"):
+        payload.update({
+            "svg": result["svg"],
+            "checks": result["checks"],
+            "passed": all(v["ok"] for v in result["checks"].values()),
+            "report": result.get("report"),
+        })
+    else:
+        payload["error"] = result.get("error") or (result.get("issues") or ["生成失败"])[0]
+    return payload
+
+
+@app.get("/api/config")
+def api_get_config() -> dict[str, Any]:
+    config = load_config()
+    return {
+        "ok": True,
+        "config": {**config, "api_key": "***" if config["api_key"] else ""},
+        "has_key": bool(config["api_key"]),
+        "config_path": str(CONFIG_PATH),
+    }
+
+
+@app.post("/api/config")
+def api_set_config(req: ConfigRequest) -> dict[str, Any]:
+    current = load_config()
+    payload = req.model_dump()
+    # 前端用 *** 占位表示「保持原值不变」
+    if payload.get("api_key") == "***":
+        payload["api_key"] = current["api_key"]
+    save_config(payload)
+    return {"ok": True, "has_key": bool(payload["api_key"])}
+
+
+@app.post("/api/config/test")
+def api_test_config() -> dict[str, Any]:
+    config = load_config()
+    if not config.get("base_url") or not config.get("model"):
+        raise HTTPException(status_code=400, detail="请先填写 API 地址与模型名称")
+    try:
+        text = llm.chat_completions(
+            base_url=config["base_url"],
+            api_key=config["api_key"],
+            model=config["model"],
+            messages=[{"role": "user", "content": "Reply with the single word: ok"}],
+            timeout=45,
+        )
+        return {"ok": True, "reply": text.strip()[:200]}
+    except llm.LLMError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
+
+
+@app.get("/api/config/models")
+def api_list_models() -> dict[str, Any]:
+    config = load_config()
+    try:
+        models = llm.list_models(base_url=config["base_url"], api_key=config["api_key"])
+        return {"ok": True, "models": models}
+    except llm.LLMError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
 
 
 # 静态资源：/files 供下载，/ 提供界面（必须最后挂载）
