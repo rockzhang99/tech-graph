@@ -210,12 +210,18 @@ async function renderDiagram() {
     const result = await post("/api/render", { mode: state.mode, spec });
     applySvg(result.svg, { report: result.report, checks: result.checks, mode: result.mode });
 
-    // 回写规范化后的 spec，让用户看到生成器实际采用的值
-    $("editor").value = JSON.stringify(syncSpecFields(spec), null, 2);
-    const title = spec.title || spec.mode || "技术图";
+    // 回写规范化后的 spec，让用户看到生成器实际采用的值；
+    // 外部格式转换 / 越界节点自动回收时，直接把修正后的 spec 写回编辑器，方便继续微调。
+    const effective = result.spec || spec;
+    $("editor").value = JSON.stringify(syncSpecFields(effective), null, 2);
+    const title = effective.title || effective.mode || "技术图";
     $("previewTitle").textContent = title;
     if (result.passed) {
-      toast("渲染完成，全部质量门禁通过", "ok");
+      if (result.autofit && result.autofit.length) {
+        toast(`已自动收回 ${result.autofit.length} 个越界节点，全部门禁通过`, "ok", 4200);
+      } else {
+        toast(result.converted ? "外部格式已转换并渲染，全部门禁通过" : "渲染完成，全部质量门禁通过", "ok");
+      }
     } else {
       toast("渲染完成，但存在门禁未通过项", "err", 4200);
     }
@@ -742,9 +748,33 @@ function formatEditor() {
   }
 }
 
+/**
+ * 读取文本文件内容，自动处理 UTF-8 / UTF-16 / GBK。
+ *
+ * File.text() 永远按 UTF-8 解码，遇到 GBK 导出的文件（国内工具很常见）不会报错，
+ * 而是返回一串替换字符；用 fatal 模式显式解码就能捕捉到并回退到 gb18030。
+ */
+async function readTextFile(file) {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  if (bytes[0] === 0xff && bytes[1] === 0xfe) return new TextDecoder("utf-16le").decode(bytes);
+  if (bytes[0] === 0xfe && bytes[1] === 0xff) return new TextDecoder("utf-16be").decode(bytes);
+  if (bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf) {
+    return new TextDecoder("utf-8").decode(bytes.subarray(3));
+  }
+  try {
+    return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+  } catch {
+    try {
+      return new TextDecoder("gb18030").decode(bytes);
+    } catch {
+      throw new Error("文件既不是 UTF-8 也不是 GBK 编码，请先转成 UTF-8");
+    }
+  }
+}
+
 async function handleSvgFile(file) {
   try {
-    const text = await file.text();
+    const text = await readTextFile(file);
     if (!text.includes("<svg")) throw new Error("不是有效的 SVG 文件");
     applySvg(text, {});
     $("previewTitle").textContent = file.name.replace(/\.svg$/i, "");
@@ -758,7 +788,7 @@ async function handleSvgFile(file) {
 
 async function handleSpecFile(file) {
   try {
-    const spec = JSON.parse(await file.text());
+    const spec = JSON.parse(await readTextFile(file));
     if (spec.style) selectStyle(Number(spec.style));
     const mode = spec.mode || spec.template_type;
     if (mode && state.types.some((t) => t.id === mode)) selectType(mode);

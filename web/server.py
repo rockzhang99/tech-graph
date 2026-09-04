@@ -85,6 +85,8 @@ from interactive_html import build_interactive_html  # noqa: E402
 from motion import probe_motion_runtime, render_motion_gif  # noqa: E402
 from validate_svg import run_check  # noqa: E402
 
+import autofit  # noqa: E402
+import convert  # noqa: E402
 import heuristic  # noqa: E402
 import layout as layout_engine  # noqa: E402
 import llm  # noqa: E402
@@ -502,29 +504,59 @@ def api_render(req: RenderRequest) -> dict[str, Any]:
         raise HTTPException(status_code=400, detail=f"spec 不是合法 JSON：{exc}") from exc
 
     mode = str(data.get("mode") or data.get("template_type") or req.mode)
+    # 第三方工具导出的 elements 格式（Group/Shape/Icon/Relationship）先翻译成
+    # FTG 的 containers/nodes/arrows，否则整个 elements 会被静默丢弃，只剩标题。
+    converted = convert.needs_conversion(data)
+    if converted:
+        try:
+            data = convert.convert_spec(data, mode)
+        except convert.ConversionError as exc:
+            raise HTTPException(status_code=400, detail=f"[convert] {exc}") from exc
     # mode 与 template_type 必须一致，否则 normalize_diagram 直接判冲突。
     data["mode"] = mode
     data["template_type"] = mode
 
+    autofitted: list[str] = []
     try:
         svg, report = GENERATOR.build_svg_with_report(mode, data)
     except DiagramValidationError as exc:
         raise HTTPException(status_code=400, detail=f"[schema] {exc}") from exc
     except ValueError as exc:
-        raise HTTPException(status_code=400, detail=f"[layout] {exc}") from exc
+        error = str(exc)
+        # 节点越出容器时先自动收回去再试一次；仍失败才把原始报错翻译成坐标提示抛出。
+        violations = autofit.gutter_violations(error)
+        if violations:
+            # 门禁下限随 quality_profile 变化（standard=0 / showcase=20），按报错里的实际值修
+            target = max(autofit.TARGET_GUTTER, max(item[3] for item in violations))
+            fitted, changes = autofit.fit_into_containers(data, target)
+            if not changes:
+                raise HTTPException(status_code=400, detail=f"[layout] {autofit.explain(data, error)}") from None
+            try:
+                svg, report = GENERATOR.build_svg_with_report(mode, fitted)
+            except ValueError:
+                raise HTTPException(status_code=400, detail=f"[layout] {autofit.explain(data, error)}") from None
+            data, autofitted = fitted, changes
+        else:
+            raise HTTPException(status_code=400, detail=f"[layout] {error}") from None
 
     path = _write(svg)
     checks = _run_checks(path)
     passed = all(item["ok"] for item in checks.values())
-    return {
+    payload: dict[str, Any] = {
         "ok": True,
         "mode": mode,
+        "converted": converted,
+        "autofit": autofitted,
         "svg": svg,
         "svg_url": _url(path),
         "checks": checks,
         "passed": passed,
         "report": report,
     }
+    if converted or autofitted:
+        # 回传实际生效的 spec，让用户看到生成器采用的结构与坐标，可继续微调
+        payload["spec"] = data
+    return payload
 
 
 @app.post("/api/check")
